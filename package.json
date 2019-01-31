@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/trwh/spotify-node/issues"
   },
-  "homepage": "https://github.com/trwh/spotify-node#readme"
+  "homepage": "https://github.com/trwh/spotify-node#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "spotify-web-api-node": "^4.0.0"
+  }
 }
