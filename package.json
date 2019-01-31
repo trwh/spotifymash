@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/trwh/spotify-node#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "spotify-web-api-node": "^4.0.0"
