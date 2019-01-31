@@ -1,0 +1,24 @@
+{
+  "name": "spotify-node",
+  "version": "1.0.0",
+  "description": "Node.js project generating pages for entertaining Spotify tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trwh/spotify-node.git"
+  },
+  "keywords": [
+    "spotify",
+    "node",
+    "node.js"
+  ],
+  "author": "Tim Harrison",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trwh/spotify-node/issues"
+  },
+  "homepage": "https://github.com/trwh/spotify-node#readme"
+}
