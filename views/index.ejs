@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
+    <title>Spotify Fight!</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <fieldset>
+        <form action="/" method="post">
+          <input name="artist" type="text" class="ghost-input" placeholder="Enter an Artist to search for" required>
+          <input type="submit" class="ghost-button" value="Search">
+        </form>
+        <% if( (artist1 !== null) && (artist2 !== null) ) { %>
+          <p>The artist could be: <%= artist1 %> or <%= artist2 %></p>
+        <% } %>
+      </fieldset>
+    </div>
+
+  </body>
+
+</html>

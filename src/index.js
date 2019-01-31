@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
 
@@ -8,9 +9,23 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 const app = express();
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.render('index', {artist1: null, artist2: null});
+})
+
+app.post('/', function (req, res) {
+  let artist = req.body.artist;
+
+  spotifyApi.searchArtists(artist)
+  .then(function(data) {
+    // console.log(JSON.stringify(data));
+    res.render('index', {artist1: data.body.artists.items[0].name, artist2: data.body.artists.items[1].name});
+  }, function(err) {
+    console.error(err);
+  });
 })
 
 app.listen(3000, function () {
@@ -44,4 +59,3 @@ function authenticateSpotify() {
 //   );
 
 // }
-
