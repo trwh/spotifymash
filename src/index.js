@@ -19,18 +19,17 @@ app.get('/', function (req, res) {
 app.post('/', function (req, res) {
   let artist1Search = req.body.artist1Search;
   let artist2Search = req.body.artist2Search;
-
   let artist1Result = null;
   let artist2Result = null;
 
   spotifyApi.searchArtists(artist1Search)
   .then(function(data) {
     // console.log(JSON.stringify(data));
-    if(data.body.artists.items[0].name)
+    if(data.body.artists.items.length < 1)
       {
-        artist1Result = data.body.artists.items[0].name;
-      } else {
         artist1Result = "No match found for Artist 1.";
+      } else {
+        artist1Result = data.body.artists.items[0].name;
       }     
   }, function(err) {
     console.error(err);
@@ -38,12 +37,12 @@ app.post('/', function (req, res) {
   }).then(function() {
     spotifyApi.searchArtists(artist2Search)
     .then(function(data) {
-      if(data.body.artists.items[0].name)
+      if(data.body.artists.items.length < 1)
         {
-          artist2Result = data.body.artists.items[0].name;
-        } else {
           artist2Result = "No match found for Artist 2.";
-        }
+        } else {
+          artist2Result = data.body.artists.items[0].name;
+        }     
       res.render('index', {
         artist1Result: artist1Result,
         artist2Result: artist2Result
@@ -51,8 +50,8 @@ app.post('/', function (req, res) {
     }, function(err) {
       console.error(err);
     });
-    
   });
+
 })
 
 app.listen(3000, function () {
