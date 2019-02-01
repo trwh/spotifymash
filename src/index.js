@@ -13,24 +13,46 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.render('index', {artist1: null, artist2: null});
+  res.render('index', {artist1Result: null, artist2Result: null});
 })
 
 app.post('/', function (req, res) {
-  let artist1 = req.body.artist1;
+  let artist1Search = req.body.artist1Search;
+  let artist2Search = req.body.artist2Search;
 
-  spotifyApi.searchArtists(artist1)
+  let artist1Result = null;
+  let artist2Result = null;
+
+  spotifyApi.searchArtists(artist1Search)
   .then(function(data) {
     // console.log(JSON.stringify(data));
     if(data.body.artists.items[0].name)
       {
-        res.render('index', {artist1: data.body.artists.items[0].name});
+        artist1Result = data.body.artists.items[0].name;
       } else {
-        res.render('index', {artist1: 'No match found!'});
+        artist1Result = "No match found for Artist 1.";
       }
+
+    spotifyApi.searchArtists(artist2Search)
+    .then(function(data) {
+      if(data.body.artists.items[0].name)
+        {
+          artist2Result = data.body.artists.items[0].name;
+        } else {
+          artist2Result = "No match found for Artist 2.";
+        }
+      res.render('index', {
+        artist1Result: artist1Result,
+        artist2Result: artist2Result
+        });
+    }, function(err) {
+      console.error(err);
+    });
+      
   }, function(err) {
     console.error(err);
   });
+
 })
 
 app.listen(3000, function () {
@@ -44,6 +66,8 @@ function authenticateSpotify() {
     function(data) {
       spotifyApi.setAccessToken(data.body['access_token']);
       console.log('The access token is ' + spotifyApi.getAccessToken());
+      let tokenValidityInMilliseconds = data.body.expires_in * 1000;
+      setTimeout(authenticateSpotify, tokenValidityInMilliseconds);
       // onceAuthenticatedDo();
     },
     function(err) {
@@ -51,16 +75,3 @@ function authenticateSpotify() {
     }
   );
 }
-
-// function onceAuthenticatedDo() {
-
-//   spotifyApi.getArtistAlbums('06HL4z0CvFAxyc27GXpf02').then(
-//     function(data) {
-//       console.log('Artist albums', data.body);
-//     },
-//     function(err) {
-//       console.error(err);
-//     }
-//   );
-
-// }

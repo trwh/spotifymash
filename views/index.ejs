@@ -22,11 +22,11 @@
             <legend>Search for artists</legend>
             <div class="form-group">
               <label class="col-form-label" for="artist1Search">Artist 1 name</label>
-              <input name="artist1" type="text" class="form-control" value="Taylor Swift" id="artist1Search">
+              <input name="artist1Search" type="text" class="form-control" value="Taylor Swift" id="artist1Search">
             </div>
             <div class="form-group">
               <label class="col-form-label" for="artist2Search">Artist 2 name</label>
-              <input name="artist2" type="text" class="form-control" value="Kanye West" id="artist2Search">
+              <input name="artist2Search" type="text" class="form-control" value="Kanye West" id="artist2Search">
             </div>
               <button type="submit" class="btn btn-primary" id="artistSearchSubmit">Search</button>
               <script>
@@ -39,8 +39,9 @@
               </script>
           </fieldset>
         </form>
-        <% if(artist1 !== null) { %>
-          <p>The artist could be: <%= artist1 %></p>
+        <% if((artist1Result !== null) && (artist2Result !== null)) { %>
+          <p>Artist 1 could be: <%= artist1Result %></p>
+          <p>Artist 2 could be: <%= artist2Result %></p>
         <% } %>
       </div>
 
