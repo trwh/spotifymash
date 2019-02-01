@@ -1,52 +1,79 @@
 <!doctype html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" integrity="sha384-F7cPHYSdE3FzBKvdxDKyFow9Y28Yq7KGHQOKpOI+rwc8s6jJnp///mpEJAib2EM6" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <title>Spotify Fight!</title>
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" integrity="sha384-F7cPHYSdE3FzBKvdxDKyFow9Y28Yq7KGHQOKpOI+rwc8s6jJnp///mpEJAib2EM6" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <title>Spotify Fight!</title>
+</head>
 
-  <body>
+<body>
+
+  <div class="container">
 
     <div class="col-lg-12">
+      <h1 class="display-5 text-center">Spotify Fight!</h1>
+      <form action="/" method="post">
+        <fieldset>
+          <div class="form-group">
+            <input name="artist1Search" type="text" class="form-control" value="Taylor Swift" id="artist1Search">
+          </div>
+          <div class="form-group">
+            <input name="artist2Search" type="text" class="form-control" value="Kanye West" id="artist2Search">
+          </div>
+          <button type="submit" class="btn btn-danger btn-lg btn-block" id="artistSearchSubmit">Fight!</button>
+          <script>
+            $("#artist1Search").on("click", function(){
+              $("#artist1Search").val("");
+            });
 
-      <div class="jumbotron">
-        <h1 class="display-5">Spotify Fight!</h1>
-        <form action="/" method="post">
-          <fieldset>
-            <legend>Search for artists</legend>
-            <div class="form-group">
-              <label class="col-form-label" for="artist1Search">Artist 1 name</label>
-              <input name="artist1Search" type="text" class="form-control" value="Taylor Swift" id="artist1Search">
-            </div>
-            <div class="form-group">
-              <label class="col-form-label" for="artist2Search">Artist 2 name</label>
-              <input name="artist2Search" type="text" class="form-control" value="Kanye West" id="artist2Search">
-            </div>
-              <button type="submit" class="btn btn-primary" id="artistSearchSubmit">Search</button>
-              <script>
-                $("#artist1Search").on("click", function(){
-                  $("#artist1Search").val("");
-                });
-                $("#artist2Search").on("click", function(){
-                  $("#artist2Search").val("");
-                });
-              </script>
-          </fieldset>
-        </form>
-        <% if((artist1Result !== null) && (artist2Result !== null)) { %>
-          <p>Artist 1 could be: <%= artist1Result %></p>
-          <p>Artist 2 could be: <%= artist2Result %></p>
-        <% } %>
-      </div>
+            $("#artist2Search").on("click", function(){
+              $("#artist2Search").val("");
+            });
 
+            $("#artist1Search").on("keyup", function(){
+              if ($("#artist1Search").val() == "") {
+                $("#artistSearchSubmit").attr("disabled", "");
+              } else {
+                $("#artistSearchSubmit").removeAttr("disabled");
+              }
+            });
+
+            $("#artist2Search").on("keyup", function(){
+              if ($("#artist2Search").val() == "") {
+                $("#artistSearchSubmit").attr("disabled", "");
+              } else {
+                $("#artistSearchSubmit").removeAttr("disabled");
+              }
+            });
+          </script>
+        </fieldset>
+      </form>
     </div>
 
-  </body>
+    <% if((artist1ResultName !== null) || (artist2ResultName !== null)) { %>
+    <div style="padding-top:15px">
+      <div class="alert alert-warning">
+    <% } %>
+
+      <% if(artist1ResultName !== null) { %>
+        <p>Artist 1 could be <%= artist1ResultName %> and has popularity on Spotify of <%= artist1ResultPopularity %>%.</p>
+      <% } %>
+
+      <% if(artist2ResultName !== null) { %>
+      <p>Artist 2 could be <%= artist2ResultName %> and has popularity on Spotify of <%= artist2ResultPopularity %>%.</p>
+      <% } %>
+
+    <% if((artist1ResultName !== null) || (artist2ResultName !== null)) { %>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+</body>
 
 </html>
