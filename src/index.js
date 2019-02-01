@@ -17,12 +17,17 @@ app.get('/', function (req, res) {
 })
 
 app.post('/', function (req, res) {
-  let artist = req.body.artist;
+  let artist1 = req.body.artist1;
 
-  spotifyApi.searchArtists(artist)
+  spotifyApi.searchArtists(artist1)
   .then(function(data) {
     // console.log(JSON.stringify(data));
-    res.render('index', {artist1: data.body.artists.items[0].name, artist2: data.body.artists.items[1].name});
+    if(data.body.artists.items[0].name)
+      {
+        res.render('index', {artist1: data.body.artists.items[0].name});
+      } else {
+        res.render('index', {artist1: 'No match found!'});
+      }
   }, function(err) {
     console.error(err);
   });

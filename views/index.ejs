@@ -3,21 +3,47 @@
 
   <head>
     <meta charset="utf-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css" integrity="sha384-F7cPHYSdE3FzBKvdxDKyFow9Y28Yq7KGHQOKpOI+rwc8s6jJnp///mpEJAib2EM6" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <title>Spotify Fight!</title>
   </head>
 
   <body>
-    <div class="container">
-      <fieldset>
+
+    <div class="col-lg-12">
+
+      <div class="jumbotron">
+        <h1 class="display-5">Spotify Fight!</h1>
         <form action="/" method="post">
-          <input name="artist" type="text" class="ghost-input" placeholder="Enter an Artist to search for" required>
-          <input type="submit" class="ghost-button" value="Search">
+          <fieldset>
+            <legend>Search for artists</legend>
+            <div class="form-group">
+              <label class="col-form-label" for="artist1Search">Artist 1 name</label>
+              <input name="artist1" type="text" class="form-control" value="Taylor Swift" id="artist1Search">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label" for="artist2Search">Artist 2 name</label>
+              <input name="artist2" type="text" class="form-control" value="Kanye West" id="artist2Search">
+            </div>
+              <button type="submit" class="btn btn-primary" id="artistSearchSubmit">Search</button>
+              <script>
+                $("#artist1Search").on("click", function(){
+                  $("#artist1Search").val("");
+                });
+                $("#artist2Search").on("click", function(){
+                  $("#artist2Search").val("");
+                });
+              </script>
+          </fieldset>
         </form>
-        <% if( (artist1 !== null) && (artist2 !== null) ) { %>
-          <p>The artist could be: <%= artist1 %> or <%= artist2 %></p>
+        <% if(artist1 !== null) { %>
+          <p>The artist could be: <%= artist1 %></p>
         <% } %>
-      </fieldset>
+      </div>
+
     </div>
 
   </body>
