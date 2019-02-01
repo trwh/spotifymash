@@ -31,8 +31,11 @@ app.post('/', function (req, res) {
         artist1Result = data.body.artists.items[0].name;
       } else {
         artist1Result = "No match found for Artist 1.";
-      }
+      }     
+  }, function(err) {
+    console.error(err);
 
+  }).then(function() {
     spotifyApi.searchArtists(artist2Search)
     .then(function(data) {
       if(data.body.artists.items[0].name)
@@ -48,11 +51,8 @@ app.post('/', function (req, res) {
     }, function(err) {
       console.error(err);
     });
-      
-  }, function(err) {
-    console.error(err);
+    
   });
-
 })
 
 app.listen(3000, function () {
@@ -68,10 +68,10 @@ function authenticateSpotify() {
       console.log('The access token is ' + spotifyApi.getAccessToken());
       let tokenValidityInMilliseconds = data.body.expires_in * 1000;
       setTimeout(authenticateSpotify, tokenValidityInMilliseconds);
-      // onceAuthenticatedDo();
     },
     function(err) {
       console.log('Something went wrong when retrieving an access token', err);
+      setTimeout(authenticateSpotify, 60000);
     }
   );
 }
