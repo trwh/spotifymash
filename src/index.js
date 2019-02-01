@@ -13,39 +13,39 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.render('index', {artist1Result: null, artist2Result: null});
+  res.render('index', {artist1ResultName: null, artist2ResultName: null});
 })
 
 app.post('/', function (req, res) {
   let artist1Search = req.body.artist1Search;
   let artist2Search = req.body.artist2Search;
-  let artist1Result = null;
-  let artist2Result = null;
+  let artist1ResultName = null;
+  let artist1ResultPopularity = null;
+  let artist2ResultName = null;
+  let artist2ResultPopularity = null;
 
   spotifyApi.searchArtists(artist1Search)
   .then(function(data) {
     // console.log(JSON.stringify(data));
-    if(data.body.artists.items.length < 1)
-      {
-        artist1Result = "No match found for Artist 1.";
-      } else {
-        artist1Result = data.body.artists.items[0].name;
-      }     
+    if(data.body.artists.items.length >= 1) {
+        artist1ResultName = data.body.artists.items[0].name;
+        artist1ResultPopularity = data.body.artists.items[0].popularity;
+      }
   }, function(err) {
     console.error(err);
 
   }).then(function() {
     spotifyApi.searchArtists(artist2Search)
     .then(function(data) {
-      if(data.body.artists.items.length < 1)
-        {
-          artist2Result = "No match found for Artist 2.";
-        } else {
-          artist2Result = data.body.artists.items[0].name;
-        }     
+      if(data.body.artists.items.length >= 1) {
+          artist2ResultName = data.body.artists.items[0].name;
+          artist2ResultPopularity = data.body.artists.items[0].popularity;
+        }
       res.render('index', {
-        artist1Result: artist1Result,
-        artist2Result: artist2Result
+        artist1ResultName: artist1ResultName,
+        artist1ResultPopularity: artist1ResultPopularity,
+        artist2ResultName: artist2ResultName,
+        artist2ResultPopularity: artist2ResultPopularity
         });
     }, function(err) {
       console.error(err);
