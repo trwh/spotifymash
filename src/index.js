@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
+const artistList = require("../data/artists.json");
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
@@ -24,33 +25,46 @@ app.post('/', function (req, res) {
   let artist2ResultName = null;
   let artist2ResultPopularity = null;
 
-  spotifyApi.searchArtists(artist1Search)
-  .then(function(data) {
-    // console.log(JSON.stringify(data));
-    if(data.body.artists.items.length >= 1) {
-        artist1ResultName = data.body.artists.items[0].name;
-        artist1ResultPopularity = data.body.artists.items[0].popularity;
-      }
-  }, function(err) {
-    console.error(err);
+  artist1ResultName = getRandomArtist(artistList).name;
+  artist1ResultPopularity = getRandomArtist(artistList).popularity;
 
-  }).then(function() {
-    spotifyApi.searchArtists(artist2Search)
-    .then(function(data) {
-      if(data.body.artists.items.length >= 1) {
-          artist2ResultName = data.body.artists.items[0].name;
-          artist2ResultPopularity = data.body.artists.items[0].popularity;
-        }
-      res.render('index', {
-        artist1ResultName: artist1ResultName,
-        artist1ResultPopularity: artist1ResultPopularity,
-        artist2ResultName: artist2ResultName,
-        artist2ResultPopularity: artist2ResultPopularity
-        });
-    }, function(err) {
-      console.error(err);
-    });
+  artist2ResultName = getRandomArtist(artistList).name;
+  artist2ResultPopularity = getRandomArtist(artistList).popularity;
+
+  res.render('index', {
+    artist1ResultName: artist1ResultName,
+    artist1ResultPopularity: artist1ResultPopularity,
+    artist2ResultName: artist2ResultName,
+    artist2ResultPopularity: artist2ResultPopularity
   });
+
+  // spotifyApi.searchArtists(artist1Search)
+  // .then(function(data) {
+  //   // console.log(JSON.stringify(data));
+  //   if(data.body.artists.items.length >= 1) {
+  //       artist1ResultName = data.body.artists.items[0].name;
+  //       artist1ResultPopularity = data.body.artists.items[0].popularity;
+  //     }
+  // }, function(err) {
+  //   console.error(err);
+
+  // }).then(function() {
+  //   spotifyApi.searchArtists(artist2Search)
+  //   .then(function(data) {
+  //     if(data.body.artists.items.length >= 1) {
+  //         artist2ResultName = data.body.artists.items[0].name;
+  //         artist2ResultPopularity = data.body.artists.items[0].popularity;
+  //       }
+  //     res.render('index', {
+  //       artist1ResultName: artist1ResultName,
+  //       artist1ResultPopularity: artist1ResultPopularity,
+  //       artist2ResultName: artist2ResultName,
+  //       artist2ResultPopularity: artist2ResultPopularity
+  //     });
+  //   }, function(err) {
+  //     console.error(err);
+  //   });
+  // });
 
 })
 
@@ -73,4 +87,14 @@ function authenticateSpotify() {
       setTimeout(authenticateSpotify, 60000);
     }
   );
+}
+
+function getRandomArtist(list) {
+  let lengthOfList = list.body.artists.items.length;
+  return list.body.artists.items[generateRandomNumber(0, lengthOfList)];
+}
+
+function generateRandomNumber(minValue, maxValue) {
+  let randomNumber = Math.random() * (maxValue - minValue) + minValue;
+  return Math.floor(randomNumber);
 }
