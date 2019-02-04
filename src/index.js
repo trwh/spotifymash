@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists.json";
+const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists - 4-2-2019,17-9-32.json";
 const artistList = require(ARTIST_LIST_RELATIVE_FILE_PATH);
-const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input-test.json');
+const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input.json');
 const ARTIST_MINIMUM_POPULARITY = 70;
 
 const spotifyApi = new SpotifyWebApi({
@@ -117,7 +117,7 @@ function generateResultText(artist1, artist2) {
   let resultText = null;
 
   if (checkForDraw(artist1, artist2)) {
-    resultText = "Wow! We have a draw! What are the odds of that? (Well, 1 in 100 to be precise.)";
+    resultText = "Wow! We have a draw! What are the odds of that?";
     return resultText;
   }
 
@@ -173,6 +173,8 @@ function addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings,
           console.log(temporaryArtistList.body.artists.items.length + " artists on list.");
         }
       });
+    } else {
+      console.log("Searched for: " + searchStrings[currentSearchStringIndex] + " and found no results.");
     }
 
     // Regardless of the number of matches, once this Spotify API call is finished, make another.
