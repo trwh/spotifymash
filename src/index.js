@@ -1,8 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const SpotifyWebApi = require('spotify-web-api-node');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
-const artistList = require("../data/artists.json");
+
+const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists.json";
+const artistList = require(ARTIST_LIST_RELATIVE_FILE_PATH);
+const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input-test.json');
+const ARTIST_MINIMUM_POPULARITY = 70;
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
@@ -71,7 +77,7 @@ function authenticateSpotify() {
     function(data) {
       spotifyApi.setAccessToken(data.body['access_token']);
       console.log('The access token is ' + spotifyApi.getAccessToken());
-      let tokenValidityInMilliseconds = data.body.expires_in * 1000;
+      let tokenValidityInMilliseconds = ((data.body.expires_in - 10) * 1000);
       setTimeout(authenticateSpotify, tokenValidityInMilliseconds);
     },
     function(err) {
@@ -120,3 +126,86 @@ function generateResultText(artist1, artist2) {
   resultText = winningArtist.name + " wins! They beat " + losingArtist.name + ".";
   return resultText;
 }
+
+// ***
+// Functions to populate artists.json via Spotify APIs
+// ***
+
+function getDateTimeString() {
+  var currentDate = new Date();
+  var dateTimeString =
+                    currentDate.getDate() + "-"
+                  + (currentDate.getMonth()+1)  + "-"
+                  + currentDate.getFullYear() + ","
+                  + currentDate.getHours() + "-"
+                  + currentDate.getMinutes() + "-"
+                  + currentDate.getSeconds();
+  return dateTimeString;
+}
+
+function getNewArtistsFilePath() {
+  let artistsFileName = "artists - " + getDateTimeString() + ".json";
+  let artistsFilePath = path.join(__dirname, '..', 'data', artistsFileName);
+  return artistsFilePath;
+}
+
+function writeJsonFileSync(filePath, JsonObject) {
+  let data = JSON.stringify(JsonObject);
+  fs.writeFileSync(filePath, data, 'utf8');
+}
+
+function readJsonFileSync(filePath) {
+  let data = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(data);
+}
+
+function addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings, currentSearchStringIndex) {
+  spotifyApi.searchArtists(searchStrings[currentSearchStringIndex])
+  .then(function(data) {
+
+    // This search string yields at least one potential artist match.
+    if (data.body.artists.items.length >= 1) {
+      let artistsReturned = data.body.artists.items;
+      artistsReturned.forEach( function(artist){
+        if (artist.popularity >= ARTIST_MINIMUM_POPULARITY) {
+          console.log("Searched for: " + searchStrings[currentSearchStringIndex] + ", got: " + artist.name + ", popularity " + artist.popularity + ".");
+          temporaryArtistList.body.artists.items.push(artist);
+          console.log(temporaryArtistList.body.artists.items.length + " artists on list.");
+        }
+      });
+    }
+
+    // Regardless of the number of matches, once this Spotify API call is finished, make another.
+    nextSearchStringIndex = currentSearchStringIndex + 1;
+    if (nextSearchStringIndex < searchStrings.length) {
+      addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings, nextSearchStringIndex);
+    } else {
+      console.log("Finished processing list, writing out artists file...");
+      writeJsonFileSync(getNewArtistsFilePath(), temporaryArtistList);
+    }
+
+  }, function(err) {
+    console.error(err);
+  });
+}
+
+function populateArtistList() {
+  let temporaryArtistList = {
+    "body": {
+      "artists": {
+        "items": []
+      }
+    }
+  };
+  let artistSearchStrings = readJsonFileSync(ARTIST_LIST_INPUT_FULL_FILE_PATH);
+  let nextSearchStringToTry = 0;
+
+  addArtistsFoundFromSpotifyApiToList(
+    temporaryArtistList,
+    artistSearchStrings,
+    nextSearchStringToTry
+  );
+}
+
+// Call to launch artist list population once we're sure we've authenticated to the Spotify API.
+// setTimeout(populateArtistList, 1000);
