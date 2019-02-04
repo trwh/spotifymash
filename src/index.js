@@ -31,43 +31,32 @@ app.post('/', function (req, res) {
     artist2 = getRandomArtist(artistList);
   }
 
-  let resultText = generateResultText(artist1, artist2);
+  spotifyApi.getArtist(artist1.id)
+  .then(function(data) {
+    // console.log(JSON.stringify(data));
+    artist1 = data.body;
+  }, function(err) {
+    console.error(err);
 
-  res.render('index', {
-    resultText: resultText,
-    artist1Name: artist1.name,
-    artist1Popularity: artist1.popularity,
-    artist2Name: artist2.name,
-    artist2Popularity: artist2.popularity,
+  }).then(function() {
+    spotifyApi.getArtist(artist2.id)
+    .then(function(data) {
+      artist2 = data.body;
+
+      // API calls done
+      let resultText = generateResultText(artist1, artist2);
+      res.render('index', {
+        resultText: resultText,
+        artist1Name: artist1.name,
+        artist1Popularity: artist1.popularity,
+        artist2Name: artist2.name,
+        artist2Popularity: artist2.popularity,
+      });
+
+    }, function(err) {
+      console.error(err);
+    });
   });
-
-  // spotifyApi.searchArtists(artist1Search)
-  // .then(function(data) {
-  //   // console.log(JSON.stringify(data));
-  //   if(data.body.artists.items.length >= 1) {
-  //       artist1Name = data.body.artists.items[0].name;
-  //       artist1Popularity = data.body.artists.items[0].popularity;
-  //     }
-  // }, function(err) {
-  //   console.error(err);
-
-  // }).then(function() {
-  //   spotifyApi.searchArtists(artist2Search)
-  //   .then(function(data) {
-  //     if(data.body.artists.items.length >= 1) {
-  //         artist2Name = data.body.artists.items[0].name;
-  //         artist2Popularity = data.body.artists.items[0].popularity;
-  //       }
-  //     res.render('index', {
-  //       artist1Name: artist1Name,
-  //       artist1Popularity: artist1Popularity,
-  //       artist2Name: artist2Name,
-  //       artist2Popularity: artist2Popularity
-  //     });
-  //   }, function(err) {
-  //     console.error(err);
-  //   });
-  // });
 
 })
 
