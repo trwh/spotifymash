@@ -17,27 +17,37 @@
 
   <div id="main">
     <h2>Who's more popular? Click to Choose.</h2>
-    <p>Yo!</p>
+    <h2><%= artist1Name %></h2>
+    <div style="
+      background-image: url(<%=artist1ImageUrl%>);
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 40vw;
+      height: 40vw;
+      border-radius: 50%;
+      ">
+    </div>
+    <h2><%= artist2Name %></h2>
+    <div style="
+      background-image: url(<%=artist2ImageUrl%>);
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 40vw;
+      height: 40vw;
+      border-radius: 50%;
+      ">
+    </div>
   </div>
+
   <div id="footer">
     <!-- Footer will go here -->
   </div>
 
+<!--   <h1>Spotifymash</h1>
+  <form action="/" method="post">
+    <button type="submit">Go!</button>
+  </form> -->
 
-<!--   <div class="container">
-
-    <h1>Spotifymash</h1>
-    <form action="/" method="post">
-      <button type="submit">Go!</button>
-    </form>
-
-    <% if((artist1Name !== null) && (artist2Name !== null)) { %>
-      <p>Artist 1 is <%= artist1Name %> and has popularity on Spotify of <%= artist1Popularity %>%.</p>
-      <p>Artist 2 is <%= artist2Name %> and has popularity on Spotify of <%= artist2Popularity %>%.</p>
-      <p><%= resultText %></p>
-    <% } %>
-
-  </div> -->
 </body>
 
 </html>

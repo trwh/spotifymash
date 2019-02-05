@@ -13,11 +13,6 @@ body {
   text-align: center;
   background-color: #000000;
 }
-img {
-  width: 175px;
-  height: 250px;
-  border: 2px solid #aaa;
-}
 h1 {
   font-size: 10vw;
   letter-spacing: -3px;
@@ -25,6 +20,9 @@ h1 {
 }
 h2 {
   font-size: 5vw;
+}
+h3 {
+  font-size: 4vw;
 }
 #header {
   background-color: #00CC47;
