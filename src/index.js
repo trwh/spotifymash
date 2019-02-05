@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists - 4-2-2019,17-9-32.json";
+const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists - 5-2-2019,10-12-55.json";
 const artistList = require(ARTIST_LIST_RELATIVE_FILE_PATH);
 const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input-test.json');
 const ARTIST_MINIMUM_POPULARITY = 60;
