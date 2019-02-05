@@ -7,8 +7,8 @@ require('dotenv').config();
 
 const ARTIST_LIST_RELATIVE_FILE_PATH = "../data/artists - 4-2-2019,17-9-32.json";
 const artistList = require(ARTIST_LIST_RELATIVE_FILE_PATH);
-const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input.json');
-const ARTIST_MINIMUM_POPULARITY = 70;
+const ARTIST_LIST_INPUT_FULL_FILE_PATH = path.join(__dirname, '..', 'data', 'artists-input-test.json');
+const ARTIST_MINIMUM_POPULARITY = 60;
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
@@ -163,31 +163,30 @@ function addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings,
   spotifyApi.searchArtists(searchStrings[currentSearchStringIndex])
   .then(function(data) {
 
-    // This search string yields at least one potential artist match.
     if (data.body.artists.items.length >= 1) {
-      let artistsReturned = data.body.artists.items;
-      artistsReturned.forEach( function(artist){
-        if (artist.popularity >= ARTIST_MINIMUM_POPULARITY) {
-          console.log("Searched for: " + searchStrings[currentSearchStringIndex] + ", got: " + artist.name + ", popularity " + artist.popularity + ".");
-          temporaryArtistList.body.artists.items.push(artist);
-          console.log(temporaryArtistList.body.artists.items.length + " artists on list.");
-        }
-      });
+      let artistReturned = data.body.artists.items[0];
+      if (artistReturned.popularity >= ARTIST_MINIMUM_POPULARITY) {
+        temporaryArtistList.body.artists.items.push(artistReturned);
+        console.log(temporaryArtistList.body.artists.items.length + " artists on list. Adding " + artistReturned.name + ", popularity " + artistReturned.popularity + ".");
+      } else {
+        console.log(temporaryArtistList.body.artists.items.length + " artists on list. " + artistReturned.name + ", popularity " + artist.popularity + " is not popular enough to add.");
+      }
     } else {
-      console.log("Searched for: " + searchStrings[currentSearchStringIndex] + " and found no results.");
+      console.log(temporaryArtistList.body.artists.items.length + " artists on list. " + searchStrings[currentSearchStringIndex] + " had no results.");
     }
 
-    // Regardless of the number of matches, once this Spotify API call is finished, make another.
-    nextSearchStringIndex = currentSearchStringIndex + 1;
+  }, function(err) {
+    console.error(err);
+  }).catch(function() {
+    // Dummy catch block to enable then.
+  }).then(function() {
+    let nextSearchStringIndex = currentSearchStringIndex + 1;
     if (nextSearchStringIndex < searchStrings.length) {
       addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings, nextSearchStringIndex);
     } else {
       console.log("Finished processing list, writing out artists file...");
       writeJsonFileSync(getNewArtistsFilePath(), temporaryArtistList);
     }
-
-  }, function(err) {
-    console.error(err);
   });
 }
 
