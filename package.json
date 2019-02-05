@@ -1,7 +1,7 @@
 {
-  "name": "spotify-node",
+  "name": "spotifymash",
   "version": "1.0.0",
-  "description": "Node.js project generating pages for entertaining Spotify tools.",
+  "description": "A Facemash-style battle between two artists on Spotify, ranked by their popularity as defined by the Spotify Web API.",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trwh/spotify-node.git"
+    "url": "git+https://github.com/trwh/spotifymash.git"
   },
   "keywords": [
     "spotify",
@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/trwh/spotify-node/issues"
   },
-  "homepage": "https://github.com/trwh/spotify-node#readme",
+  "homepage": "https://github.com/trwh/spotifymash#readme",
   "dependencies": {
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
