@@ -21,22 +21,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
-  res.render('index', {artist1Name: null, artist2Name: null});
+  let artists = getPairOfUniqueRandomArtists(artistList);
+
+  res.render('index', {
+    artist1Name: artists[0].name,
+    artist1ImageUrl: artists[0].images[0].url,
+    artist1Id: artists[0].id,
+    artist2Name: artists[1].name,
+    artist2ImageUrl: artists[1].images[0].url,
+    artist2Id: artists[1].id
+  });
 })
 
 app.post('/', function (req, res) {
+  // TODO let artist1Id = req.body.artist1Id;
+  // TODO let artist2Id = req.body.artist2Id;
+  // TODO let winnerGuessed = req.body.winnerGuessed;
+
+  // TODO need function to refresh artist, returning promise
+
   let artist1Name = null;
   let artist1Popularity = null;
   let artist2Name = null;
   let artist2Popularity = null;
   let fightResult = null;
-
-  let artist1 = getRandomArtist(artistList);
-  let artist2 = getRandomArtist(artistList);
-
-  while (checkArtistsAreTheSame(artist1, artist2)) {
-    artist2 = getRandomArtist(artistList);
-  }
 
   spotifyApi.getArtist(artist1.id)
   .then(function(data) {
@@ -88,18 +96,39 @@ function authenticateSpotify() {
   );
 }
 
-function getRandomArtist(list) {
-  let lengthOfList = list.body.artists.items.length;
-  return list.body.artists.items[generateRandomNumber(0, lengthOfList)];
+function generateRandomNumber(minValue, maxValue) {
+  let randomNumber = Math.random() * (maxValue - minValue) + minValue;
+  return Math.floor(randomNumber);
 }
 
 function checkArtistsAreTheSame(artist1, artist2) {
   return (artist1.id == artist2.id) ? true : false;
 }
 
-function generateRandomNumber(minValue, maxValue) {
-  let randomNumber = Math.random() * (maxValue - minValue) + minValue;
-  return Math.floor(randomNumber);
+function checkArtistHasImage(artist) {
+  return (artist.images.length >= 1) ? true : false;
+}
+
+function getRandomArtistThatHasImage(list) {
+  let artist = null;
+  let lengthOfList = list.body.artists.items.length;
+
+  do {
+    artist = list.body.artists.items[generateRandomNumber(0, lengthOfList)];
+  } while (!checkArtistHasImage(artist));
+
+  return artist;
+}
+
+function getPairOfUniqueRandomArtists(list) {
+  let artist1 = getRandomArtistThatHasImage(list);
+  let artist2 = getRandomArtistThatHasImage(list);
+
+  while (checkArtistsAreTheSame(artist1, artist2)) {
+    artist2 = getRandomArtistThatHasImage(list);
+  }
+
+  return([artist1, artist2]);
 }
 
 function checkForDraw(artist1, artist2) {
