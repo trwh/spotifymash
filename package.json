@@ -17,7 +17,7 @@
     "node.js"
   ],
   "author": "Tim Harrison",
-  "license": "ISC",
+  "license": "GNU GPLv3",
   "bugs": {
     "url": "https://github.com/trwh/spotify-node/issues"
   },
