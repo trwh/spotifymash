@@ -18,6 +18,7 @@ const spotifyApi = new SpotifyWebApi({
 const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.get('/', function (req, res) {
   res.render('index', {artist1Name: null, artist2Name: null});
