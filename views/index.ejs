@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   <title>Spotifymash</title>
 </head>
@@ -16,26 +16,14 @@
   </div>
 
   <div id="main">
-    <h2>Who's more popular? Click to Choose.</h2>
-    <h2><%= artist1Name %></h2>
-    <div style="
-      background-image: url(<%=artist1ImageUrl%>);
-      background-repeat: no-repeat;
-      background-size: cover;
-      width: 40vw;
-      height: 40vw;
-      border-radius: 50%;
-      ">
+    <h2>Who's more popular on Spotify?<br>Click to Choose.</h2>
+    <div class="artist-div">
+      <h2 class="artist-name"><%=artist1Name%></h2>
+      <div class="artist-image-div" style="background-image: url(<%=artist1ImageUrl%>)"></div>
     </div>
-    <h2><%= artist2Name %></h2>
-    <div style="
-      background-image: url(<%=artist2ImageUrl%>);
-      background-repeat: no-repeat;
-      background-size: cover;
-      width: 40vw;
-      height: 40vw;
-      border-radius: 50%;
-      ">
+    <div class="artist-div">
+      <h2 class="artist-name"><%=artist2Name%></h2>
+      <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)"></div>
     </div>
   </div>
 
@@ -43,10 +31,15 @@
     <!-- Footer will go here -->
   </div>
 
-<!--   <h1>Spotifymash</h1>
-  <form action="/" method="post">
-    <button type="submit">Go!</button>
-  </form> -->
+  <script type="text/javascript">
+    let artist1Name = "<%=artist1Name%>";
+    let artist1Popularity = <%=artist1Popularity%>;
+    let artist2Name = "<%=artist2Name%>";
+    let artist2Popularity = <%=artist2Popularity%>;
+
+    console.log(artist1Name);
+
+  </script>
 
 </body>
 
