@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const SpotifyWebApi = require('spotify-web-api-node');
 const fs = require('fs');
 const path = require('path');
@@ -17,56 +16,34 @@ const spotifyApi = new SpotifyWebApi({
 
 const app = express();
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
-  let artists = getPairOfUniqueRandomArtists(artistList);
+  let artistsFromDatabase = getPairOfUniqueRandomArtists(artistList);
+  let artistsFromLiveAPI = [];
 
-  res.render('index', {
-    artist1Name: artists[0].name,
-    artist1ImageUrl: artists[0].images[0].url,
-    artist1Id: artists[0].id,
-    artist2Name: artists[1].name,
-    artist2ImageUrl: artists[1].images[0].url,
-    artist2Id: artists[1].id
-  });
-})
-
-app.post('/', function (req, res) {
-  // TODO let artist1Id = req.body.artist1Id;
-  // TODO let artist2Id = req.body.artist2Id;
-  // TODO let winnerGuessed = req.body.winnerGuessed;
-
-  // TODO need function to refresh artist, returning promise
-
-  let artist1Name = null;
-  let artist1Popularity = null;
-  let artist2Name = null;
-  let artist2Popularity = null;
-  let fightResult = null;
-
-  spotifyApi.getArtist(artist1.id)
+  spotifyApi.getArtist(artistsFromDatabase[0].id)
   .then(function(data) {
     // console.log(JSON.stringify(data));
-    artist1 = data.body;
+    artistsFromLiveAPI[0] = data.body;
   }, function(err) {
     console.error(err);
 
   }).then(function() {
-    spotifyApi.getArtist(artist2.id)
+    spotifyApi.getArtist(artistsFromDatabase[1].id)
     .then(function(data) {
-      artist2 = data.body;
+      // console.log(JSON.stringify(data));
+      artistsFromLiveAPI[1] = data.body;
 
       // API calls done
-      let resultText = generateResultText(artist1, artist2);
       res.render('index', {
-        resultText: resultText,
-        artist1Name: artist1.name,
-        artist1Popularity: artist1.popularity,
-        artist2Name: artist2.name,
-        artist2Popularity: artist2.popularity,
-      });
+          artist1Name: artistsFromLiveAPI[0].name,
+          artist1ImageUrl: artistsFromLiveAPI[0].images[0].url,
+          artist1Popularity: artistsFromLiveAPI[0].popularity,
+          artist2Name: artistsFromLiveAPI[1].name,
+          artist2ImageUrl: artistsFromLiveAPI[1].images[0].url,
+          artist2Popularity: artistsFromLiveAPI[1].popularity
+        });
 
     }, function(err) {
       console.error(err);
@@ -129,32 +106,6 @@ function getPairOfUniqueRandomArtists(list) {
   }
 
   return([artist1, artist2]);
-}
-
-function checkForDraw(artist1, artist2) {
-  return (artist1.popularity == artist2.popularity) ? true : false;
-}
-
-function findWinningArtist(artist1, artist2) {
-  return (artist1.popularity > artist2.popularity) ? artist1 : artist2;
-}
-
-function findLosingArtist(artist1, artist2) {
-  return (artist1.popularity < artist2.popularity) ? artist1 : artist2;
-}
-
-function generateResultText(artist1, artist2) {
-  let resultText = null;
-
-  if (checkForDraw(artist1, artist2)) {
-    resultText = "Wow! We have a draw! What are the odds of that?";
-    return resultText;
-  }
-
-  let winningArtist = findWinningArtist(artist1, artist2);
-  let losingArtist = findLosingArtist(artist1, artist2);
-  resultText = winningArtist.name + " wins! They beat " + losingArtist.name + ".";
-  return resultText;
 }
 
 // ***
