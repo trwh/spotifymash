@@ -16,14 +16,17 @@
   </div>
 
   <div id="main">
-    <h2>Who's more popular on Spotify?<br>Click to Choose.</h2>
-    <div class="artist-div" id="artist1">
+    <h2 id="intro-heading">Who's more popular on Spotify?<br>Click to Choose.</h2>
+    <h2 id="draw-heading" hidden="">It's a draw!<br><a href="/">Try another?</a></h2>
+    <h2 id="correct-result-heading" hidden="">Correct, well done!<br><a href="/">Try another?</a></h2>
+    <h2 id="incorrect-result-heading" hidden="">Wong, better luck next time!<br><a href="/">Try another?</a></h2>
+    <div class="artist-div" id="artist-div-artist1">
       <h2 class="artist-name"><%=artist1Name%></h2>
-      <div class="artist-image-div" style="background-image: url(<%=artist1ImageUrl%>)"></div>
+      <div class="artist-image-div" style="background-image: url(<%=artist1ImageUrl%>)" id="artist-image-div-artist1"></div>
     </div>
-    <div class="artist-div" id="artist2">
+    <div class="artist-div" id="artist-div-artist2">
       <h2 class="artist-name"><%=artist2Name%></h2>
-      <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)"></div>
+      <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)" id="artist-image-div-artist2"></div>
     </div>
   </div>
 
@@ -45,11 +48,40 @@
 
       if (isDraw(artist1Popularity, artist2Popularity)) {
         $(".artist-div").css("background-color", "#00CC47");
+        $("#intro-heading").attr("hidden", "");
+        $("#draw-heading").removeAttr("hidden");
+      } else {
+        if (artist1Wins(artist1Popularity, artist2Popularity)) {
+          if (artistIdClicked == "artist-div-artist1") {
+            // User guessed correctly
+            $("#artist-div-artist1").css("background-color", "#00CC47");
+            $("#intro-heading").attr("hidden", "");
+            $("#correct-result-heading").removeAttr("hidden");
+          } else {
+            // User guessed incorrectly
+            $("#artist-div-artist2").css("background-color", "#CC0033");
+            $("#intro-heading").attr("hidden", "");
+            $("#incorrect-result-heading").removeAttr("hidden");
+          }
+        } else {
+          if (artistIdClicked == "artist-div-artist2") {
+            // User guessed correctly
+            $("#artist-div-artist2").css("background-color", "#00CC47");
+            $("#intro-heading").attr("hidden", "");
+            $("#correct-result-heading").removeAttr("hidden");
+          } else {
+            // User guessed incorrectly
+            $("#artist-div-artist1").css("background-color", "#CC0033");
+            $("#intro-heading").attr("hidden", "");
+            $("#incorrect-result-heading").removeAttr("hidden");
+          }
+        }
       }
 
-      // change heding text
+      $("#artist-image-div-artist1").text(artist1Popularity);
+      $("#artist-image-div-artist2").text(artist2Popularity);
 
-      console.log("User clicked " + artistIdClicked);
+      setTimeout(resetGame, 2000);
     }
 
     function isDraw(artist1Popularity, artist2Popularity) {
@@ -60,7 +92,9 @@
       return (artist1Popularity > artist2Popularity) ? true : false;
     }
 
-
+    function resetGame() {
+      window.location.href = "/";
+    }
   </script>
 
 </body>
