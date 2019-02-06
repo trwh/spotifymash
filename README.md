@@ -6,7 +6,8 @@ Spotifymash keeps a list of artists to rank, based on my own (varied!!) music co
 ### Built With
 
 * [Node.js](https://nodejs.org/en/) - Server-side application (chosen to enable Client Credentials authentication).
-* [spotify-web-api-node](https://rometools.github.io/rome/) - Node module to make using the Spotify API easier.
+* [jQuery](https://jquery.com/) - Client-side scripting.
+* [spotify-web-api-node](https://rometools.github.io/rome/) - Node module to make using the Spotify Web API easier.
 * [EJS](https://github.com/thelinmichael/spotify-web-api-node) - View templating with embedded JavaScript.
 
 ### Installation
