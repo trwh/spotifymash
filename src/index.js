@@ -78,11 +78,11 @@ function generateRandomNumber(minValue, maxValue) {
   return Math.floor(randomNumber);
 }
 
-function checkArtistsAreTheSame(artist1, artist2) {
+function artistsAreTheSame(artist1, artist2) {
   return (artist1.id == artist2.id) ? true : false;
 }
 
-function checkArtistHasImage(artist) {
+function artistHasImage(artist) {
   return (artist.images.length >= 1) ? true : false;
 }
 
@@ -92,7 +92,7 @@ function getRandomArtistThatHasImage(list) {
 
   do {
     artist = list.body.artists.items[generateRandomNumber(0, lengthOfList)];
-  } while (!checkArtistHasImage(artist));
+  } while (!artistHasImage(artist));
 
   return artist;
 }
@@ -101,7 +101,7 @@ function getPairOfUniqueRandomArtists(list) {
   let artist1 = getRandomArtistThatHasImage(list);
   let artist2 = getRandomArtistThatHasImage(list);
 
-  while (checkArtistsAreTheSame(artist1, artist2)) {
+  while (artistsAreTheSame(artist1, artist2)) {
     artist2 = getRandomArtistThatHasImage(list);
   }
 
