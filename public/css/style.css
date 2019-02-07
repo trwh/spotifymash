@@ -47,7 +47,6 @@ h3 {
 }
 #body {
   padding: 5px;
-  padding-bottom:60px;
 }
 #body a{
   color: #fff;
@@ -74,6 +73,16 @@ h3 {
   border-style: outset;
   border-width: 0.5vw;
   border-color: #292424;
+  border-radius: 2vw;
+}
+#scoring-container-div {
+  clear: both;
+}
+.scoring-div {
+  background-color: #292424;
+  width: 44vw;
+  margin: 1vw;
+  margin-bottom: 5vw;
   border-radius: 2vw;
 }
 #progress-bar-container {

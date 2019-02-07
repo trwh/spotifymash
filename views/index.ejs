@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <title>Spotifymash</title>
@@ -34,10 +35,19 @@
         <h2 class="artist-name"><%=artist2Name%></h2>
         <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)" id="artist-image-div-artist2">&nbsp</div>
       </div>
-    </div>
 
-    <div id="progress-bar-container">
-      <div id="progress-bar">
+      <div id="scoring-container-div">
+        <div class="score-div" style="float: left;">
+          <h2 class="scoring-div" id="score"></h2>
+        </div>
+        <div class="score-div" style="float: right;">
+          <h2 class="scoring-div" id="streak"></h2>
+        </div>
+      </div>
+
+      <div id="progress-bar-container">
+        <div id="progress-bar">
+        </div>
       </div>
     </div>
 
@@ -51,10 +61,30 @@
   </div>
 
   <script type="text/javascript">
-    let artist1Name = "<%=artist1Name%>";
-    let artist1Popularity = <%=artist1Popularity%>;
-    let artist2Name = "<%=artist2Name%>";
-    let artist2Popularity = <%=artist2Popularity%>;
+    var artist1Name = "<%=artist1Name%>";
+    var artist1Popularity = <%=artist1Popularity%>;
+    var artist2Name = "<%=artist2Name%>";
+    var artist2Popularity = <%=artist2Popularity%>;
+    var currentScore = 0;
+    var currentStreak = 0;
+
+    $(document).ready(function() {
+
+      if (Cookies.get("spotifymashScore")) {
+        currentScore = Cookies.get("spotifymashScore");
+      } else {
+        Cookies.set("spotifymashScore", 0, { expires: 31 });
+      }
+
+      if (Cookies.get("spotifymashStreak")) {
+        currentStreak = Cookies.get("spotifymashStreak");
+      } else {
+        Cookies.set("spotifymashStreak", 0, { expires: 31 });
+      }
+
+      $("#score").text("Score: " + currentScore);
+      $("#streak").text("Streak: " + currentStreak);
+    });
 
     $(".artist-div").on("click", userVotes);
 
@@ -63,6 +93,7 @@
       var artistIdClicked = $(this).attr("id");
 
       if (isDraw(artist1Popularity, artist2Popularity)) {
+        incrementScore();
         $(".artist-div").css("background-color", "#1DB954");
         $("#intro-heading").attr("hidden", "");
         $("#draw-heading").removeAttr("hidden");
@@ -70,11 +101,13 @@
         if (artist1Wins(artist1Popularity, artist2Popularity)) {
           if (artistIdClicked == "artist-div-artist1") {
             // User guessed correctly
+            incrementScore();
             $("#artist-div-artist1").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
             // User guessed incorrectly
+            endStreak();
             $("#artist-div-artist2").css("background-color", "#CC0033");
             $("#intro-heading").attr("hidden", "");
             $("#incorrect-result-heading").removeAttr("hidden");
@@ -82,11 +115,13 @@
         } else {
           if (artistIdClicked == "artist-div-artist2") {
             // User guessed correctly
+            incrementScore();
             $("#artist-div-artist2").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
             // User guessed incorrectly
+            endStreak();
             $("#artist-div-artist1").css("background-color", "#CC0033");
             $("#intro-heading").attr("hidden", "");
             $("#incorrect-result-heading").removeAttr("hidden");
@@ -98,7 +133,7 @@
       $("#artist-image-div-artist2").text(artist2Popularity);
 
       animateProgressBar();
-      setTimeout(resetGame, 2000);
+      setTimeout(nextGame, 2000);
     }
 
     function isDraw(artist1Popularity, artist2Popularity) {
@@ -109,7 +144,37 @@
       return (artist1Popularity > artist2Popularity) ? true : false;
     }
 
-    function resetGame() {
+    function incrementScore() {
+      currentScore++;
+      currentStreak++;
+
+      $("#score").text("Score: " + currentScore);
+      $("#streak").text("Streak: " + currentStreak);
+
+      Cookies.set("spotifymashScore", currentScore, { expires: 31 });
+      Cookies.set("spotifymashStreak", currentStreak, { expires: 31 });
+    }
+
+    function endStreak() {
+      currentStreak = 0;
+
+      $("#streak").text("Streak: " + currentStreak);
+
+      Cookies.set("spotifymashStreak", currentStreak, { expires: 31 });
+    }
+
+    function resetScores() {
+      currentScore++;
+      currentStreak++;
+
+      $("#score").text("Score: " + currentScore);
+      $("#streak").text("Streak: " + currentStreak);
+
+      Cookies.remove("spotifymashScore");
+      Cookies.remove("spotifymashStreak");
+    }
+
+    function nextGame() {
       location.reload();
     }
 
