@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <title>Spotifymash</title>
 </head>
 
@@ -24,13 +25,13 @@
         <h2 id="correct-result-heading" hidden="">Correct, well done!</h2>
         <h2 id="incorrect-result-heading" hidden="">Wrong, better luck next time!</h2>
       </div>
-      <div class="artist-div" id="artist-div-artist1" style="float: left; margin-right: 1vw">
+      <div class="artist-div" id="artist-div-artist1" style="float: left;">
         <h2 class="artist-name"><%=artist1Name%></h2>
-        <div class="artist-image-div" style="background-image: url(<%=artist1ImageUrl%>)" id="artist-image-div-artist1"></div>
+        <div class="artist-image-div" style="background-image: url(<%=artist1ImageUrl%>)" id="artist-image-div-artist1">&nbsp</div>
       </div>
-      <div class="artist-div" id="artist-div-artist2" style="float: right; margin-left: 1vw;">
+      <div class="artist-div" id="artist-div-artist2" style="float: right;">
         <h2 class="artist-name"><%=artist2Name%></h2>
-        <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)" id="artist-image-div-artist2"></div>
+        <div class="artist-image-div" style="background-image: url(<%=artist2ImageUrl%>)" id="artist-image-div-artist2">&nbsp</div>
       </div>
     </div>
 
@@ -56,14 +57,14 @@
       var artistIdClicked = $(this).attr("id");
 
       if (isDraw(artist1Popularity, artist2Popularity)) {
-        $(".artist-div").css("background-color", "#00CC47");
+        $(".artist-div").css("background-color", "#1DB954");
         $("#intro-heading").attr("hidden", "");
         $("#draw-heading").removeAttr("hidden");
       } else {
         if (artist1Wins(artist1Popularity, artist2Popularity)) {
           if (artistIdClicked == "artist-div-artist1") {
             // User guessed correctly
-            $("#artist-div-artist1").css("background-color", "#00CC47");
+            $("#artist-div-artist1").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
@@ -75,7 +76,7 @@
         } else {
           if (artistIdClicked == "artist-div-artist2") {
             // User guessed correctly
-            $("#artist-div-artist2").css("background-color", "#00CC47");
+            $("#artist-div-artist2").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
