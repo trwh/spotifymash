@@ -35,9 +35,15 @@ h3 {
   background-color: #1DB954;
   padding: 5px;
 }
+#header img{
+  float: left;
+  height: 14.5vw;
+  width: 14.5vw;
+}
 #header a{
   color: #fff;
   text-decoration: none;
+  margin-left: -14.5vw;
 }
 #body {
   padding: 5px;
