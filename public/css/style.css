@@ -37,13 +37,13 @@ h3 {
 }
 #header img{
   float: left;
-  height: 14.5vw;
-  width: 14.5vw;
+  height: 14vw;
+  width: 14vw;
 }
 #header a{
   color: #fff;
   text-decoration: none;
-  margin-left: -14.5vw;
+  margin-left: -14vw;
 }
 #body {
   padding: 5px;
