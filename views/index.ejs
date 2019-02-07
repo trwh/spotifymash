@@ -16,11 +16,12 @@
   <div id="container">
 
     <div id="header">
-      <img src="/img/logo.png" align="middle">
+      <img src="/img/logo.png" align="middle" alt="Decorative logo" style="float: left;">
+      <img src="/img/reset.png" align="middle" alt="Reset scores" id="reset-scores" style="float: right;">
       <h1><a href="/">Spotifymash</a></h1>
     </div>
 
-    <div id="body">
+    <div class="body" id="main-body">
       <div>
         <h2 id="intro-heading">Who's more popular on Spotify?</h2>
         <h2 id="draw-heading" hidden="">It's a draw!</h2>
@@ -51,11 +52,20 @@
       </div>
     </div>
 
+    <div class="body" id="about-body" hidden="">
+      <h2>
+        <p>A <a href="https://en.wikipedia.org/wiki/History_of_Facebook" target="_blank">Facemash</a>-style battle between two artists on <a href="https://www.spotify.com" target="_blank">Spotify</a>, ranked by their popularity as defined by the <a href="https://developer.spotify.com/documentation/web-api/" target="_blank">Spotify Web API</a>.</p>
+        <a href="mailto: spotifymash@trwh.co.uk">spotifymash@trwh.co.uk</a><br>
+        <a href="https://www.linkedin.com/in/trwh" target="_blank">linkedin.com/in/trwh</a><br>
+        <a href="https://github.com/trwh/spotifymash" target="_blank">github.com/trwh/spotifymash</a><br>
+        <p>Tim Harrison<br>MMXIX</p>
+      </h2>
+    </div>
+
     <div id="footer">
       <h2>
-        <a href="mailto: spotifymash@trwh.co.uk">spotifymash@trwh.co.uk</a><br>
-        <a href="https://github.com/trwh/spotifymash" target="_blank">github.com/trwh/spotifymash</a><br>
-        <a href="https://www.linkedin.com/in/trwh" target="_blank">linkedin.com/in/trwh</a><br>
+        <div id="about-div">About</div>
+      </h2>
     </div>
 
   </div>
@@ -163,9 +173,11 @@
       Cookies.set("spotifymashStreak", currentStreak, { expires: 31 });
     }
 
+    $("#reset-scores").on("click", resetScores);
+
     function resetScores() {
-      currentScore++;
-      currentStreak++;
+      currentScore = 0;
+      currentStreak = 0;
 
       $("#score").text("Score: " + currentScore);
       $("#streak").text("Streak: " + currentStreak);
@@ -190,6 +202,14 @@
           elem.style.width = width + '%';
         }
       }
+    }
+
+    $("#about-div").on("click", displayAbout);
+
+    function displayAbout() {
+      $("#main-body").attr("hidden", "");
+      $("#footer").attr("hidden", "");
+      $("#about-body").removeAttr("hidden");
     }
 
   </script>
