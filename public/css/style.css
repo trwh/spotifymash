@@ -36,19 +36,18 @@ h3 {
   padding: 5px;
 }
 #header img{
-  float: left;
   height: 14vw;
   width: 14vw;
 }
 #header a{
   color: #fff;
   text-decoration: none;
-  margin-left: -14vw;
+  /*margin-left: -14vw;*/
 }
-#body {
+.body {
   padding: 5px;
 }
-#body a{
+.body a{
   color: #fff;
 }
 .artist-image-div {
@@ -100,8 +99,4 @@ h3 {
   width: 100%;
   height: auto;
   clear: both;
-}
-#footer a{
-  color: #fff;
-  text-decoration: none;
 }
