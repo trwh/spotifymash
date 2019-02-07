@@ -76,6 +76,16 @@ h3 {
   border-color: #292424;
   border-radius: 2vw;
 }
+#progress-bar-container {
+  background-color: #292424;
+  width: 100%;
+  clear: both;
+}
+#progress-bar {
+  width: 0;
+  height: 5vw;
+  background-color: #1DB954;
+}
 #footer {
   background-color: #292424;
   width: 100%;

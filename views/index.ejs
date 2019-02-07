@@ -36,6 +36,11 @@
       </div>
     </div>
 
+    <div id="progress-bar-container">
+      <div id="progress-bar">
+      </div>
+    </div>
+
     <div id="footer">
       <h2>
         <a href="mailto: spotifymash@trwh.co.uk">spotifymash@trwh.co.uk</a><br>
@@ -92,6 +97,7 @@
       $("#artist-image-div-artist1").text(artist1Popularity);
       $("#artist-image-div-artist2").text(artist2Popularity);
 
+      animateProgressBar();
       setTimeout(resetGame, 2000);
     }
 
@@ -106,6 +112,21 @@
     function resetGame() {
       location.reload();
     }
+
+    function animateProgressBar() {
+      var elem = document.getElementById("progress-bar");
+      var width = 1;
+      var id = setInterval(frame, 19.5);
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+        } else {
+          width++;
+          elem.style.width = width + '%';
+        }
+      }
+    }
+
   </script>
 
 </body>
