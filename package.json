@@ -6,7 +6,7 @@
   "scripts": {
     "preinstall": "npm install pm2 -g",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js"
+    "start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   "author": "Tim Harrison",
   "license": "GNU GPLv3",
   "bugs": {
-    "url": "https://github.com/trwh/spotify-node/issues"
+    "url": "https://github.com/trwh/spotifymash/issues"
   },
   "homepage": "https://github.com/trwh/spotifymash#readme",
   "dependencies": {
