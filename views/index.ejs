@@ -207,9 +207,19 @@
     $("#about-div").on("click", displayAbout);
 
     function displayAbout() {
-      $("#main-body").attr("hidden", "");
-      $("#footer").attr("hidden", "");
-      $("#about-body").removeAttr("hidden");
+      if (!$("#main-body").attr("hidden")) {
+        $("#main-body").attr("hidden", "");
+        $("#about-div").text("Back");
+        $("#about-body").removeAttr("hidden");
+        $("#reset-scores").css("opacity", "0");
+        $("#reset-scores").off("click");
+      } else {
+        $("#main-body").removeAttr("hidden");
+        $("#about-div").text("About");
+        $("#about-body").attr("hidden", "");
+        $("#reset-scores").css("opacity", "");
+        $("#reset-scores").on("click", resetScores);
+      }
     }
 
   </script>
