@@ -26,21 +26,31 @@ app.get('/', function (req, res) {
       (artistsFromDatabase[0].id),
       (artistsFromDatabase[1].id)
     ])
-  .then(function(data) {
-    // console.log(JSON.stringify(data));
-    artistsFromLiveAPI = data.body.artists;
-  }, function(err) {
-    console.error(err);
-  }).then(function() {
-    res.render('index', {
-      artist1Name: artistsFromLiveAPI[0].name,
-      artist1ImageUrl: artistsFromLiveAPI[0].images[0].url,
-      artist1Popularity: artistsFromLiveAPI[0].popularity,
-      artist2Name: artistsFromLiveAPI[1].name,
-      artist2ImageUrl: artistsFromLiveAPI[1].images[0].url,
-      artist2Popularity: artistsFromLiveAPI[1].popularity
+    .then(function(data) {
+      artistsFromLiveAPI = data.body.artists;
+
+      res.render('index', {
+        artist1Name: artistsFromLiveAPI[0].name,
+        artist1ImageUrl: artistsFromLiveAPI[0].images[0].url,
+        artist1Popularity: artistsFromLiveAPI[0].popularity,
+        artist2Name: artistsFromLiveAPI[1].name,
+        artist2ImageUrl: artistsFromLiveAPI[1].images[0].url,
+        artist2Popularity: artistsFromLiveAPI[1].popularity
+      });
+    }, function(err) {
+      console.error(err);
+
+      // Fall back to stale information on API failure
+      res.render('index', {
+        artist1Name: artistsFromDatabase[0].name,
+        artist1ImageUrl: artistsFromDatabase[0].images[0].url,
+        artist1Popularity: artistsFromDatabase[0].popularity,
+        artist2Name: artistsFromDatabase[1].name,
+        artist2ImageUrl: artistsFromDatabase[1].images[0].url,
+        artist2Popularity: artistsFromDatabase[1].popularity
+      });
     });
-  });
+
 });
 
 app.listen(8081, function () {
@@ -150,7 +160,7 @@ function addArtistsFoundFromSpotifyApiToList(temporaryArtistList, searchStrings,
   }, function(err) {
     console.error(err);
   }).catch(function() {
-    // Dummy catch block to enable then.
+    // Keep executing even if the Spotify Web API has no match.
   }).then(function() {
     let nextSearchStringIndex = currentSearchStringIndex + 1;
     if (nextSearchStringIndex < searchStrings.length) {
