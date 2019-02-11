@@ -92,8 +92,7 @@
         Cookies.set("spotifymashStreak", 0, { expires: 31 });
       }
 
-      $("#score").text("Score: " + currentScore);
-      $("#streak").text("Streak: " + currentStreak);
+      drawScoreAndStreak();
     });
 
     $(".artist-div").on("click", userVotes);
@@ -103,35 +102,31 @@
       var artistIdClicked = $(this).attr("id");
 
       if (isDraw(artist1Popularity, artist2Popularity)) {
-        incrementScore();
+        correctGuess();
         $(".artist-div").css("background-color", "#1DB954");
         $("#intro-heading").attr("hidden", "");
         $("#draw-heading").removeAttr("hidden");
       } else {
         if (artist1Wins(artist1Popularity, artist2Popularity)) {
           if (artistIdClicked == "artist-div-artist1") {
-            // User guessed correctly
-            incrementScore();
+            correctGuess();
             $("#artist-div-artist1").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
-            // User guessed incorrectly
-            endStreak();
+            incorrectGuess();
             $("#artist-div-artist2").css("background-color", "#CC0033");
             $("#intro-heading").attr("hidden", "");
             $("#incorrect-result-heading").removeAttr("hidden");
           }
         } else {
           if (artistIdClicked == "artist-div-artist2") {
-            // User guessed correctly
-            incrementScore();
+            correctGuess();
             $("#artist-div-artist2").css("background-color", "#1DB954");
             $("#intro-heading").attr("hidden", "");
             $("#correct-result-heading").removeAttr("hidden");
           } else {
-            // User guessed incorrectly
-            endStreak();
+            incorrectGuess();
             $("#artist-div-artist1").css("background-color", "#CC0033");
             $("#intro-heading").attr("hidden", "");
             $("#incorrect-result-heading").removeAttr("hidden");
@@ -154,23 +149,44 @@
       return (artist1Popularity > artist2Popularity) ? true : false;
     }
 
-    function incrementScore() {
+    function correctGuess() {
       currentScore++;
-      currentStreak++;
 
-      $("#score").text("Score: " + currentScore);
-      $("#streak").text("Streak: " + currentStreak);
+      if (currentStreak < 0) {
+      currentStreak = 1;
+      } else {
+        currentStreak++;
+      }
+
+      drawScoreAndStreak();
 
       Cookies.set("spotifymashScore", currentScore, { expires: 31 });
       Cookies.set("spotifymashStreak", currentStreak, { expires: 31 });
     }
 
-    function endStreak() {
-      currentStreak = 0;
+    function incorrectGuess() {
+      if (currentStreak > 0) {
+      currentStreak = -1;
+      } else {
+        currentStreak--;
+      }
 
-      $("#streak").text("Streak: " + currentStreak);
+      drawScoreAndStreak();
 
       Cookies.set("spotifymashStreak", currentStreak, { expires: 31 });
+    }
+
+    function drawScoreAndStreak() {
+      $("#score").text("Score: " + currentScore);
+      $("#streak").text("Streak: " + currentStreak);
+
+      if (currentStreak > 0) {
+        $("#streak").css("color", "#1DB954");
+      } else if (currentStreak < 0) {
+        $("#streak").css("color", "#CC0033");
+      } else {
+        $("#streak").css("color", "");
+      }
     }
 
     $("#reset-scores").on("click", resetScores);
@@ -179,8 +195,7 @@
       currentScore = 0;
       currentStreak = 0;
 
-      $("#score").text("Score: " + currentScore);
-      $("#streak").text("Streak: " + currentStreak);
+      drawScoreAndStreak();
 
       Cookies.remove("spotifymashScore");
       Cookies.remove("spotifymashStreak");
