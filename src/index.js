@@ -22,35 +22,26 @@ app.get('/', function (req, res) {
   let artistsFromDatabase = getPairOfUniqueRandomArtists(artistList);
   let artistsFromLiveAPI = [];
 
-  spotifyApi.getArtist(artistsFromDatabase[0].id)
+  spotifyApi.getArtists([
+      (artistsFromDatabase[0].id),
+      (artistsFromDatabase[1].id)
+    ])
   .then(function(data) {
     // console.log(JSON.stringify(data));
-    artistsFromLiveAPI[0] = data.body;
+    artistsFromLiveAPI = data.body.artists;
   }, function(err) {
     console.error(err);
-
   }).then(function() {
-    spotifyApi.getArtist(artistsFromDatabase[1].id)
-    .then(function(data) {
-      // console.log(JSON.stringify(data));
-      artistsFromLiveAPI[1] = data.body;
-
-      // API calls done
-      res.render('index', {
-          artist1Name: artistsFromLiveAPI[0].name,
-          artist1ImageUrl: artistsFromLiveAPI[0].images[0].url,
-          artist1Popularity: artistsFromLiveAPI[0].popularity,
-          artist2Name: artistsFromLiveAPI[1].name,
-          artist2ImageUrl: artistsFromLiveAPI[1].images[0].url,
-          artist2Popularity: artistsFromLiveAPI[1].popularity
-        });
-
-    }, function(err) {
-      console.error(err);
+    res.render('index', {
+      artist1Name: artistsFromLiveAPI[0].name,
+      artist1ImageUrl: artistsFromLiveAPI[0].images[0].url,
+      artist1Popularity: artistsFromLiveAPI[0].popularity,
+      artist2Name: artistsFromLiveAPI[1].name,
+      artist2ImageUrl: artistsFromLiveAPI[1].images[0].url,
+      artist2Popularity: artistsFromLiveAPI[1].popularity
     });
   });
-
-})
+});
 
 app.listen(8081, function () {
   console.log('Spotifymash listening on port 8081!');
