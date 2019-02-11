@@ -17,15 +17,12 @@ body {
   background-color: #191414;
 }
 h1 {
-  font-size: 10vw;
+  font-size: 42px;
   letter-spacing: -3px;
   line-height: 10px;
 }
 h2 {
-  font-size: 5vw;
-}
-h3 {
-  font-size: 4vw;
+  font-size: 24px;
 }
 #container {
   min-height:100%;
@@ -36,13 +33,12 @@ h3 {
   padding: 5px;
 }
 #header img{
-  height: 14vw;
-  width: 14vw;
+  height: 4em;
+  width: 4em;
 }
 #header a{
   color: #fff;
   text-decoration: none;
-  /*margin-left: -14vw;*/
 }
 .body {
   padding: 5px;
