@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'Spotifymash',
-    script: './src/index.js',
+    script: './src/server.js',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     args: 'one two',
