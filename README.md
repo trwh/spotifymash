@@ -10,6 +10,7 @@ Spotifymash keeps a list of artists to rank, based on my own (varied!!) music co
 * [spotify-web-api-node](https://rometools.github.io/rome/) - Node module to make using the Spotify Web API easier.
 * [EJS](https://github.com/thelinmichael/spotify-web-api-node) - View templating with embedded JavaScript.
 * [js-cookie](https://github.com/js-cookie/js-cookie) - Plain JavaScript API for handling browser cookies.
+* [greenlock-express](https://www.npmjs.com/package/greenlock-express) - Node module that automates fetching and renewing Let's Encrypt certificates.
 
 ### Installation
 
@@ -25,7 +26,31 @@ Visit http://localhost:8081 to view Spotifymash!
 
 ### Deploy to production
 
+There are two branches to help with deployment of this project.
+
+#### `production` - AWS Elastic Beanstalk
+
 This project has been deployed in AWS using Elastic Beanstalk, you'll find the correct `npm start` script in `package.json` in the `production` branch to install and launch the project using PM2. Both the development (`master`) and the `production` branch have Express set to listen on TCP/8081 for compatibility with the NGINX proxy EB deploys. There is configuration in `.ebextensions` to enable HTTPS with an AWS-provided cert (replace the ARN in `securelistener-alb.config` with your own) and also to enable NGINX to serve the `public` directory directly.
+
+#### `greenlock` - Debian / Raspian
+
+![Raspberry Pi 3B and Ubiquiti networking gear](https://trwh.co.uk/file/raspi.jpg)
+
+At the time of writing (January 2021) Spotifymash is hosted from a Raspberry Pi model 3B running Raspian Buster and Node 14. I've created a branch `greenlock` with some tweaks needed for compatibility with the Node module `greenlock-express` which completely automates fetching and updating digital certificates from Let's Encrypt for HTTPS. I've also merged the PM2 config from the main `production` branch. To get the code from this branch working familiarise yourself with the [walkthrough](https://git.rootprojects.org/root/greenlock-express.js/src/branch/master/WALKTHROUGH.md) and then having followed the process listed above under Installation, check out the `greenlock` branch and follow these steps (filling in the details where needed),
+
+```
+npm install
+sudo setcap 'cap_net_bind_service=+ep' $(which node)
+npx greenlock init --config-dir ./greenlock.d --maintainer-email 'you@example.com'
+npx greenlock add --subject yourdomain.com --altnames yourdomain.com,www.yourdomain.com
+```
+You can delete the automatically-generated files in the root of the project, `app.js` and `server.js` since there are ones already in `src/`. Add your email address to `src/server.js`.
+```
+npm start
+```
+Note that `npm start -- --staging` uses the Let's Encrypt staging environment if you want to test without requesting real certificates and risking hitting the rate limit. You'll need to use the start script specified in `package.json` from `master` to do this (e.g. don't launch PM2 for testing).
+
+I suggest launching the server in a window manager like [Screen](https://www.gnu.org/software/screen/) so you can log out of the machine and still see the console output and terminate the app. Screen should be available to install via most Linux package managers.
 
 ### Artist List
 
