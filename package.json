@@ -26,6 +26,7 @@
     "dotenv": "^6.2.0",
     "ejs": "^2.7.4",
     "express": "^4.16.4",
+    "greenlock-express": "^4.0.3",
     "spotify-web-api-node": "^4.0.0"
   }
 }
