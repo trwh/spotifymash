@@ -53,9 +53,7 @@ app.get('/', function (req, res) {
 
 });
 
-app.listen(8081, function () {
-  console.log('Spotifymash listening on port 8081!');
-})
+module.exports = app;
 
 authenticateSpotify();
 

@@ -2,10 +2,10 @@
   "name": "spotifymash",
   "version": "1.0.0",
   "description": "A Facemash-style battle between two artists on Spotify, ranked by their popularity as defined by the Spotify Web API.",
-  "main": "./src/index.js",
+  "main": "./src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js"
+    "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",
