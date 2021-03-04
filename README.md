@@ -46,6 +46,7 @@ npx greenlock add --subject yourdomain.com --altnames yourdomain.com,www.yourdom
 ```
 You can delete the automatically-generated files in the root of the project, `app.js` and `server.js` since there are ones already in `src/`. Add your email address to `src/server.js`.
 ```
+sudo setcap 'cap_net_bind_service=+ep' $(which node)
 npm start
 ```
 Note that `npm start -- --staging` uses the Let's Encrypt staging environment if you want to test without requesting real certificates and risking hitting the rate limit. You'll need to use the start script specified in `package.json` from `master` to do this (e.g. don't launch PM2 for testing).
